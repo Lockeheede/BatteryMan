@@ -43,7 +43,7 @@ ABatteryManCPP::ABatteryManCPP()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	//13. Ctrl+Shift+B to compile 
+	//13. Ctrl+Shift+B to compile. This will literally build the things that are coded and MUST be done everytime something new is created so it can be a part of the BP, or whatever it is referencing.  
 	//14. Now the BP Character will have a CameraBoom and Follow Camera attached to it
 	//15. Next create a Game Mode CPP Class and Inherit from Game Mode. 
 	//16. Then make a BP and select a BatteryMan_GameMode. Name it BatteryMan_GameMode_BP
@@ -80,17 +80,48 @@ void ABatteryManCPP::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	//Before 26 Note: Input was created within the Project Settings Input
+
+	//27.Binds the Turn from the Input for this class to the Pawn's Controller Yaw and Pitch Input
+	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+
+	//28. Bind Actions with pressing and releasing jump button.
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	//29. Bind MoveForward and MoveRight Actions
+	PlayerInputComponent->BindAxis("MoveForward", this, &ABatteryManCPP::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ABatteryManCPP::MoveRight);
+
 }
 
 //26. Moved Functions to the bottom
 void ABatteryManCPP::MoveForward(float Axis)
 {
+	//30. Calculate the move right direction of the character, as long as they are not dead
+	if (!bDead)
+	{
+		//31. Create a Rotation FRotator variable and set it to equal the rotation of the controller? Then use that variable to set the YawRotation variable by its Y Axis
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(Direction, Axis);
+	}
 }
 
 void ABatteryManCPP::MoveRight(float Axis)
 {
+	//30. Calculate the move right direction of the character, as long as they are not dead
+	if (!bDead)
+	{
+		//31. Create a Rotation FRotator variable and set it to equal the rotation of the controller? Then use that variable to set the YawRotation variable by its Y Axis
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		AddMovementInput(Direction, Axis);
+	}
 }
 
 
