@@ -66,6 +66,8 @@ void ABatteryManCPP::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ABatteryManCPP::OnBeginOverlap);
+
 }
 
 // Called every frame
@@ -95,10 +97,11 @@ void ABatteryManCPP::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+
 //26. Moved Functions to the bottom
 void ABatteryManCPP::MoveForward(float Axis)
 {
-	//30. Calculate the move right direction of the character, as long as they are not dead
+	//30. Calculate the move forward direction of the character, as long as they are not dead
 	if (!bDead)
 	{
 		//31. Create a Rotation FRotator variable and set it to equal the rotation of the controller? Then use that variable to set the YawRotation variable by its Y Axis
@@ -115,7 +118,7 @@ void ABatteryManCPP::MoveRight(float Axis)
 	//30. Calculate the move right direction of the character, as long as they are not dead
 	if (!bDead)
 	{
-		//31. Create a Rotation FRotator variable and set it to equal the rotation of the controller? Then use that variable to set the YawRotation variable by its Y Axis
+		//31. Create a Rotation FRotator variable and set it to equal the rotation of the controller? Then use that variable to set the YawRotation variable by its Y Axis. Then create the pick up item blueprint. Add a static mesh and box collision to it. Then go to the BatterManCPP.h file to declare a new variable.
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
@@ -125,3 +128,14 @@ void ABatteryManCPP::MoveRight(float Axis)
 }
 
 
+void ABatteryManCPP::OnBeginOverlap(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if (OtherActor->ActorHasTag("Recharge"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Collided With"));
+		//35. Test if the other actor has a tag of Recharge and print Collided With to the output (console) log. Then go to the PickUpItem_BP, go to its Actor details, press the drop down, add the array to tags and name the 1st one Recharge. 
+
+		//36. In this file's BeginPlay, you need to bind the BeginOverLap to the CapsuleComponent. 
+	}
+
+}

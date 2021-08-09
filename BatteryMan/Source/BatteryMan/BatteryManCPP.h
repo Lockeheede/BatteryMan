@@ -52,6 +52,17 @@ public:
 	//21. Go back to the cpp..
 	//24. Right click the movement functions, refactor and create definitions for them or type them out in .cpp file. 
 
+	//32. Declare a new variable 
+	UPROPERTY(VisibleAnwhere, BlueprintReadOnly)
+		float Power;
+
+	UPROPERTY(EditAnwhere)
+		float Power_Threshold;
+	//33.Visible anywhere are what they say they are in the editor
+
+	UFUNCTION()
+		void OnBeginOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	//34. Right Click and create a definition for the OnBeginOverlap. Then go to the .cpp and cut the new definition and put it at the bottom, underneath the move right. Note all the parameters are not important at a beginner level. What we need is the OtherActor. See the .cpp
 
 protected:
 	// Called when the game starts or when spawned
